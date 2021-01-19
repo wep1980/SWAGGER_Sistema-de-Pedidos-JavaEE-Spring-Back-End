@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,15 @@ import br.com.waldirep.springionicmc.domain.Cliente;
 import br.com.waldirep.springionicmc.dto.ClienteDTO;
 import br.com.waldirep.springionicmc.dto.ClienteNewDTO;
 import br.com.waldirep.springionicmc.services.ClienteService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 
 
 @RestController
 @RequestMapping(value = "/clientes")
+@Api(value = "API REST Clientes")
+@CrossOrigin(origins = "*") // Liberando todos os dominios para acessar a api
 public class ClienteResources {
 	
 	@Autowired
@@ -41,6 +46,7 @@ public class ClienteResources {
 	 * @return
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET) // Este END POINT recebe /categorias/id ( Recebe o id digitado )
+	@ApiOperation(value = "Retorna um cliente por id")
 	public ResponseEntity<Cliente> find (@PathVariable Integer id) {     // O END POINT recebe o id da URL atraves da anotação @PathVariable
 		
 		Cliente cliente = service.find(id);
@@ -75,6 +81,7 @@ public class ClienteResources {
 	 * @param obj
 	 * @return
 	 */
+	@ApiOperation(value = "Insere um novo cliente")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
 		
@@ -96,6 +103,7 @@ public class ClienteResources {
 	 * @return
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@ApiOperation(value = "Atualiza um cliente")
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id){
 		
 		Cliente obj = service.fromDTO(objDto);
@@ -112,6 +120,7 @@ public class ClienteResources {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "Deleta um cliente por id")
 	@PreAuthorize("hasAnyRole('ADMIN')") // Autorização por perfil -> Apenas quem é ADMIN tem acesso -> Configurado na classe securityConfig com @EnableGlobalMethodSecurity(prePostEnabled = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)  
 	public ResponseEntity<Void> delete (@PathVariable Integer id) {  

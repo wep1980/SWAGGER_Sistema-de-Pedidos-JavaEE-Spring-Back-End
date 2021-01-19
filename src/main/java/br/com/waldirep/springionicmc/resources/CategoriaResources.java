@@ -21,6 +21,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.waldirep.springionicmc.domain.Categoria;
 import br.com.waldirep.springionicmc.dto.CategoriaDTO;
 import br.com.waldirep.springionicmc.services.CategoriaService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 
 
@@ -38,6 +41,13 @@ public class CategoriaResources {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "Busca categoria por id")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Esta requisição foi bem sucedida"),
+		    @ApiResponse(code = 401, message = "Não autenticado"),
+		    @ApiResponse(code = 403, message = "Não autorizado"),
+		    @ApiResponse(code = 404, message = "Não encontrado")
+		})
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)  
 	public ResponseEntity<Categoria> find (@PathVariable Integer id) {  
 		
@@ -54,6 +64,14 @@ public class CategoriaResources {
 	 * @param obj
 	 * @return
 	 */
+	@ApiOperation(value = "Insere categoria")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Esta requisição foi bem sucedida"),
+		    @ApiResponse(code = 201, message = "Novo recurso criado"),
+		    @ApiResponse(code = 401, message = "Não autenticado"),
+		    @ApiResponse(code = 403, message = "Não autorizado"),
+		    @ApiResponse(code = 404, message = "Não encontrado")
+		})
 	@PreAuthorize("hasAnyRole('ADMIN')") // Autorização por perfil -> Apenas quem é ADMIN tem acesso -> Configurado na classe securityConfig com @EnableGlobalMethodSecurity(prePostEnabled = true)
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto){
@@ -71,6 +89,14 @@ public class CategoriaResources {
 	 *  @PathVariable Integer id => Recebe o paramêtro na URL
 	 * @return
 	 */
+	@ApiOperation(value = "Atualiza categoria")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Esta requisição foi bem sucedida"),
+		    @ApiResponse(code = 201, message = "Novo recurso criado"),
+		    @ApiResponse(code = 401, message = "Não autenticado"),
+		    @ApiResponse(code = 403, message = "Não autorizado"),
+		    @ApiResponse(code = 404, message = "Não encontrado")
+		})
 	@PreAuthorize("hasAnyRole('ADMIN')") // Autorização por perfil -> Apenas quem é ADMIN tem acesso -> Configurado na classe securityConfig com @EnableGlobalMethodSecurity(prePostEnabled = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id){
@@ -83,7 +109,14 @@ public class CategoriaResources {
 	}
 	
 	
-	
+	@ApiOperation(value = "Deleta categoria")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Esta requisição foi bem sucedida"),
+		    @ApiResponse(code = 204, message = "Não existe conteúdo"),
+		    @ApiResponse(code = 400, message = "Não é possível deletar uma categoria que possui produtos"),
+		    @ApiResponse(code = 401, message = "Não autenticado"),
+		    @ApiResponse(code = 403, message = "Não autorizado"),
+		})
 	@PreAuthorize("hasAnyRole('ADMIN')") // Autorização por perfil -> Apenas quem é ADMIN tem acesso -> Configurado na classe securityConfig com @EnableGlobalMethodSecurity(prePostEnabled = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)  
 	public ResponseEntity<Void> delete (@PathVariable Integer id) {  
@@ -93,8 +126,14 @@ public class CategoriaResources {
 		return ResponseEntity.noContent().build();	
 	}
 	
-	
-	
+	@ApiOperation(value = "Lista todas categorias")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Esta requisição foi bem sucedida"),
+		    @ApiResponse(code = 401, message = "Não autenticado"),
+		    @ApiResponse(code = 403, message = "Não autorizado"),
+		    @ApiResponse(code = 404, message = "Não encontrado"),
+		    @ApiResponse(code = 500, message = "Erro inesperado"),
+		})
 	@RequestMapping(method = RequestMethod.GET)  
 	public ResponseEntity<List<CategoriaDTO>> findAll () {  
 		
@@ -127,6 +166,13 @@ public class CategoriaResources {
 	 * @param direction
 	 * @return
 	 */
+	@ApiOperation(value = "Lista categorias paginadas")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Esta requisição foi bem sucedida"),
+		    @ApiResponse(code = 401, message = "Não autenticado"),
+		    @ApiResponse(code = 403, message = "Não autorizado"),
+		    @ApiResponse(code = 404, message = "Não encontrado"),
+		})
 	@RequestMapping(value ="/page",  method = RequestMethod.GET)  
 	public ResponseEntity<Page<CategoriaDTO>> findPage (
 			@RequestParam(value = "page", defaultValue = "0") Integer page, 
